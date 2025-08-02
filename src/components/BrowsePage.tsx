@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import MangaGrid from './MangaGrid';
+import SearchableTagSelector from './SearchableTagSelector';
 
 interface Manga {
   id: string;
@@ -17,7 +18,7 @@ interface Manga {
 interface FilterOption {
   id: string;
   label: string;
-  count?: number;
+  count: number;
 }
 
 const BrowsePage: React.FC = () => {
@@ -46,6 +47,45 @@ const BrowsePage: React.FC = () => {
     { id: 'supernatural', label: 'Supernatural', count: 560 },
     { id: 'thriller', label: 'Thriller', count: 380 },
     { id: 'sports', label: 'Sports', count: 290 },
+    { id: 'psychological', label: 'Psychological', count: 320 },
+    { id: 'mystery', label: 'Mystery', count: 280 },
+    { id: 'historical', label: 'Historical', count: 190 },
+    { id: 'martial-arts', label: 'Martial Arts', count: 450 },
+    { id: 'mecha', label: 'Mecha', count: 180 },
+    { id: 'music', label: 'Music', count: 120 },
+    { id: 'parody', label: 'Parody', count: 90 },
+    { id: 'school', label: 'School', count: 520 },
+    { id: 'seinen', label: 'Seinen', count: 680 },
+    { id: 'shoujo', label: 'Shoujo', count: 420 },
+    { id: 'shounen', label: 'Shounen', count: 890 },
+    { id: 'josei', label: 'Josei', count: 180 },
+    { id: 'ecchi', label: 'Ecchi', count: 240 },
+    { id: 'harem', label: 'Harem', count: 310 },
+    { id: 'isekai', label: 'Isekai', count: 280 },
+    { id: 'magic', label: 'Magic', count: 420 },
+    { id: 'military', label: 'Military', count: 150 },
+    { id: 'monsters', label: 'Monsters', count: 200 },
+    { id: 'ninja', label: 'Ninja', count: 180 },
+    { id: 'police', label: 'Police', count: 90 },
+    { id: 'post-apocalyptic', label: 'Post-Apocalyptic', count: 120 },
+    { id: 'reverse-harem', label: 'Reverse Harem', count: 85 },
+    { id: 'samurai', label: 'Samurai', count: 95 },
+    { id: 'space', label: 'Space', count: 110 },
+    { id: 'superhero', label: 'Superhero', count: 160 },
+    { id: 'time-travel', label: 'Time Travel', count: 75 },
+    { id: 'vampire', label: 'Vampire', count: 130 },
+    { id: 'video-games', label: 'Video Games', count: 95 },
+    { id: 'war', label: 'War', count: 85 },
+    { id: 'western', label: 'Western', count: 45 },
+    { id: 'yuri', label: 'Yuri', count: 120 },
+    { id: 'yaoi', label: 'Yaoi', count: 95 },
+    { id: 'gender-bender', label: 'Gender Bender', count: 65 },
+    { id: 'incest', label: 'Incest', count: 25 },
+    { id: 'lolicon', label: 'Lolicon', count: 35 },
+    { id: 'shotacon', label: 'Shotacon', count: 30 },
+    { id: 'tragedy', label: 'Tragedy', count: 180 },
+    { id: 'vampire', label: 'Vampire', count: 130 },
+    { id: 'zombies', label: 'Zombies', count: 85 },
   ];
 
   const statuses: FilterOption[] = [
@@ -399,24 +439,13 @@ const BrowsePage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     Genres
                   </label>
-                  <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-                    {genres.map((genre) => (
-                      <label key={genre.id} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleGenreChange(genre.id)}
-                          className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
-                          {genre.label}
-                        </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          ({genre.count})
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+                  <SearchableTagSelector
+                    tags={genres}
+                    selectedTags={selectedGenres}
+                    onTagChange={handleGenreChange}
+                    onClearAll={() => setSelectedGenres([])}
+                    placeholder="Search genres..."
+                  />
                 </div>
 
                 {/* Status Filter */}
