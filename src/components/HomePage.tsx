@@ -139,20 +139,65 @@ const HomePage: React.FC = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-              Discover Amazing Manga
-            </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl mb-8 sm:mb-12 max-w-3xl mx-auto opacity-90">
-              Read thousands of manga titles, from classic series to the latest releases, all in one place.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg">
-                Start Reading
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200 text-lg">
-                Browse Library
-              </button>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Content */}
+            <div className="text-center lg:text-left">
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium mb-4">
+                  New Release
+                </span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
+                Jujutsu Kaisen
+              </h1>
+              <p className="text-lg sm:text-xl lg:text-2xl mb-6 sm:mb-8 opacity-90">
+                A world where cursed spirits and jujutsu sorcerers battle in an epic supernatural adventure.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg">
+                  Read Now
+                </button>
+                <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200 text-lg">
+                  View Chapters
+                </button>
+              </div>
+              <div className="mt-6 flex items-center justify-center lg:justify-start space-x-6 text-sm">
+                <div className="flex items-center space-x-1">
+                  <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <span>4.6/5</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span>250 Chapters</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  <span>Action, Supernatural</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Cover Image */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                <div className="w-64 sm:w-80 lg:w-96 aspect-[3/4] rounded-lg overflow-hidden shadow-2xl">
+                  <img 
+                    src="https://via.placeholder.com/400x600/4A90E2/FFFFFF?text=Jujutsu+Kaisen" 
+                    alt="Jujutsu Kaisen" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-4 -right-4 bg-white text-gray-900 px-4 py-2 rounded-lg shadow-lg">
+                  <div className="text-sm font-semibold">Chapter 250</div>
+                  <div className="text-xs text-gray-600">Latest Release</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
