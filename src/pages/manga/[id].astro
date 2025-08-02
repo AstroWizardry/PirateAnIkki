@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import MangaDetailPage from "../../components/MangaDetailPage.tsx";
+
+export interface Props {
+  id: string;
+}
+
+const { id } = Astro.params;
+---
+
+<Layout>
+  <MangaDetailPage mangaId={id} client:load />
+</Layout> 
