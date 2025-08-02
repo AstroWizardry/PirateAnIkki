@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import MangaGrid from './MangaGrid';
 import SearchableTagSelector from './SearchableTagSelector';
+import MangaListView from './MangaListView';
+import MangaGridView from './MangaGridView';
+import MangaIconView from './MangaIconView';
+import ViewModeSelector from './ViewModeSelector';
+import type { ViewMode } from './ViewModeSelector';
 
 interface Manga {
   id: string;
@@ -32,6 +36,7 @@ const BrowsePage: React.FC = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [ratingFilter, setRatingFilter] = useState<number>(0);
   const [chapterFilter, setChapterFilter] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   // Mock filter options
   const genres: FilterOption[] = [
@@ -551,14 +556,33 @@ const BrowsePage: React.FC = () => {
                   </p>
                 )}
               </div>
+              
+              {/* View Mode Selector */}
+              <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
             </div>
 
             {/* Manga Grid */}
-            <MangaGrid
-              mangas={filteredMangas}
-              onMangaClick={handleMangaClick}
-              loading={loading}
-            />
+            {viewMode === 'grid' && (
+              <MangaGridView
+                mangas={filteredMangas}
+                onMangaClick={handleMangaClick}
+                loading={loading}
+              />
+            )}
+            {viewMode === 'list' && (
+              <MangaListView
+                mangas={filteredMangas}
+                onMangaClick={handleMangaClick}
+                loading={loading}
+              />
+            )}
+            {viewMode === 'icon' && (
+              <MangaIconView
+                mangas={filteredMangas}
+                onMangaClick={handleMangaClick}
+                loading={loading}
+              />
+            )}
           </div>
         </div>
       </div>
