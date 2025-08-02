@@ -15,9 +15,10 @@ interface Manga {
 }
 
 const HomePage: React.FC = () => {
+  const [lastUpdatedManga, setLastUpdatedManga] = useState<Manga[]>([]);
+  const [staffPickManga, setStaffPickManga] = useState<Manga[]>([]);
   const [featuredManga, setFeaturedManga] = useState<Manga[]>([]);
-  const [recentManga, setRecentManga] = useState<Manga[]>([]);
-  const [popularManga, setPopularManga] = useState<Manga[]>([]);
+  const [recentlyAddedManga, setRecentlyAddedManga] = useState<Manga[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -90,11 +91,34 @@ const HomePage: React.FC = () => {
           genres: ['Action', 'Drama', 'Horror'],
           description: 'Humanity fights for survival against giant titans.',
         },
+        {
+          id: '7',
+          title: 'Demon Slayer',
+          coverImage: 'https://via.placeholder.com/300x400/FF6B9D/FFFFFF?text=Demon+Slayer',
+          author: 'Koyoharu Gotouge',
+          status: 'completed',
+          rating: 4.7,
+          chapters: 205,
+          genres: ['Action', 'Fantasy', 'Historical'],
+          description: 'A young demon slayer fights to save his sister and humanity.',
+        },
+        {
+          id: '8',
+          title: 'Jujutsu Kaisen',
+          coverImage: 'https://via.placeholder.com/300x400/4A90E2/FFFFFF?text=Jujutsu+Kaisen',
+          author: 'Gege Akutami',
+          status: 'ongoing',
+          rating: 4.6,
+          chapters: 250,
+          genres: ['Action', 'Supernatural', 'Horror'],
+          description: 'A world where cursed spirits and jujutsu sorcerers battle.',
+        },
       ];
 
-      setFeaturedManga(mockManga.slice(0, 6));
-      setRecentManga(mockManga.slice(1, 7));
-      setPopularManga(mockManga.slice(2, 8));
+      setLastUpdatedManga(mockManga.slice(0, 6));
+      setStaffPickManga(mockManga.slice(1, 7));
+      setFeaturedManga(mockManga.slice(2, 8));
+      setRecentlyAddedManga(mockManga.slice(3, 9));
       setLoading(false);
     }, 1000);
   }, []);
@@ -174,8 +198,54 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Manga */}
+      {/* Last Updated */}
+      <section className="py-8 sm:py-12 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Last Updated
+            </h2>
+            <a
+              href="/browse"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm sm:text-base"
+            >
+              View All →
+            </a>
+          </div>
+          <MangaGrid
+            mangas={lastUpdatedManga}
+            onMangaClick={handleMangaClick}
+            loading={loading}
+            size="small"
+          />
+        </div>
+      </section>
+
+      {/* Staff Pick */}
       <section className="py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Staff Pick
+            </h2>
+            <a
+              href="/browse"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm sm:text-base"
+            >
+              View All →
+            </a>
+          </div>
+          <MangaGrid
+            mangas={staffPickManga}
+            onMangaClick={handleMangaClick}
+            loading={loading}
+            size="large"
+          />
+        </div>
+      </section>
+
+      {/* Featured Manga */}
+      <section className="py-8 sm:py-12 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
@@ -192,38 +262,17 @@ const HomePage: React.FC = () => {
             mangas={featuredManga}
             onMangaClick={handleMangaClick}
             loading={loading}
+            size="medium"
           />
         </div>
       </section>
 
-      {/* Recent Updates */}
-      <section className="py-8 sm:py-12 bg-white dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              Recent Updates
-            </h2>
-            <a
-              href="/browse"
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm sm:text-base"
-            >
-              View All →
-            </a>
-          </div>
-          <MangaGrid
-            mangas={recentManga}
-            onMangaClick={handleMangaClick}
-            loading={loading}
-          />
-        </div>
-      </section>
-
-      {/* Popular Manga */}
+      {/* Recently Added */}
       <section className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              Popular Manga
+              Recently Added
             </h2>
             <a
               href="/browse"
@@ -233,9 +282,10 @@ const HomePage: React.FC = () => {
             </a>
           </div>
           <MangaGrid
-            mangas={popularManga}
+            mangas={recentlyAddedManga}
             onMangaClick={handleMangaClick}
             loading={loading}
+            size="small"
           />
         </div>
       </section>

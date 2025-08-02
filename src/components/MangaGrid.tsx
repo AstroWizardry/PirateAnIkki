@@ -17,30 +17,54 @@ interface MangaGridProps {
   mangas: Manga[];
   onMangaClick?: (id: string) => void;
   loading?: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 
 const MangaGrid: React.FC<MangaGridProps> = ({
   mangas,
   onMangaClick,
   loading = false,
+  size = 'medium',
 }) => {
+  const getGridStyles = () => {
+    switch (size) {
+      case 'small':
+        return {
+          grid: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6',
+          gap: 'gap-3 sm:gap-4',
+        };
+      case 'large':
+        return {
+          grid: 'grid-cols-1 sm:grid-cols-2',
+          gap: 'gap-6 sm:gap-8',
+        };
+      default: // medium
+        return {
+          grid: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+          gap: 'gap-4 sm:gap-6',
+        };
+    }
+  };
+
+  const gridStyles = getGridStyles();
+
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 sm:gap-6">
+      <div className={`grid ${gridStyles.grid} ${gridStyles.gap}`}>
         {Array.from({ length: 12 }).map((_, index) => (
           <div
             key={index}
             className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse"
           >
             <div className="aspect-[3/4] bg-gray-200 dark:bg-gray-700"></div>
-            <div className="p-3 sm:p-4">
-              <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-              <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-              <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-              <div className="flex gap-1">
-                <div className="h-5 w-8 sm:w-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                <div className="h-5 w-8 sm:w-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                <div className="h-5 w-8 sm:w-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="p-4 sm:p-6">
+              <div className="h-5 sm:h-6 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
+              <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
+              <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
+              <div className="flex gap-2">
+                <div className="h-6 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-6 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-6 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
               </div>
             </div>
           </div>
@@ -76,11 +100,12 @@ const MangaGrid: React.FC<MangaGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 sm:gap-6">
+    <div className={`grid ${gridStyles.grid} ${gridStyles.gap}`}>
       {mangas.map((manga) => (
         <MangaCard
           key={manga.id}
           {...manga}
+          size={size}
           onCardClick={onMangaClick}
         />
       ))}
