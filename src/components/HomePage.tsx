@@ -339,18 +339,43 @@ const HomePage: React.FC = () => {
       <section className="py-12 sm:py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
-            Ready to Start Reading?
+            Pirate An Ikki
           </h2>
           <p className="text-lg sm:text-xl mb-8 sm:mb-12 opacity-90">
-            Join millions of readers and discover your next favorite manga series.
+            A free community-driven manga and doujinshi platform built with modern web technologies.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg">
               Get Started
             </button>
             <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors duration-200 text-lg">
               Learn More
             </button>
+          </div>
+          <div className="text-sm opacity-75">
+            <p className="mb-2">
+              Powered by{' '}
+              <a 
+                href="https://astro.build" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="underline hover:text-blue-200 transition-colors duration-200"
+              >
+                Astro
+              </a>
+              {' '}and{' '}
+              <a 
+                href="https://convex.dev" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="underline hover:text-blue-200 transition-colors duration-200"
+              >
+                Convex
+              </a>
+            </p>
+            <p className="text-xs">
+              Join our community and contribute to the world's largest free manga collection
+            </p>
           </div>
         </div>
       </section>
