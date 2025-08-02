@@ -23,12 +23,14 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-              PirateAnIkki
-            </h1>
-            <span className="ml-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">
-              Manga Reader
-            </span>
+            <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                PirateAnIkki
+              </h1>
+              <span className="ml-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">
+                Manga Reader
+              </span>
+            </a>
           </div>
 
           {/* Desktop Navigation */}

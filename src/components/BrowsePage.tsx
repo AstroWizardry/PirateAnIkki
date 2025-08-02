@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import Sidebar from './Sidebar';
 import MangaGrid from './MangaGrid';
 
 interface Manga {
@@ -28,6 +27,10 @@ const BrowsePage: React.FC = () => {
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('latest');
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [ratingFilter, setRatingFilter] = useState<number>(0);
+  const [chapterFilter, setChapterFilter] = useState<string>('all');
 
   // Mock filter options
   const genres: FilterOption[] = [
@@ -213,6 +216,26 @@ const BrowsePage: React.FC = () => {
       );
     }
 
+    // Apply rating filter
+    if (ratingFilter > 0) {
+      filtered = filtered.filter(manga => manga.rating >= ratingFilter);
+    }
+
+    // Apply chapter filter
+    if (chapterFilter !== 'all') {
+      switch (chapterFilter) {
+        case 'short':
+          filtered = filtered.filter(manga => manga.chapters <= 50);
+          break;
+        case 'medium':
+          filtered = filtered.filter(manga => manga.chapters > 50 && manga.chapters <= 200);
+          break;
+        case 'long':
+          filtered = filtered.filter(manga => manga.chapters > 200);
+          break;
+      }
+    }
+
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
@@ -224,8 +247,11 @@ const BrowsePage: React.FC = () => {
       );
     }
 
+    // Apply sorting
+    filtered = getSortedMangas(filtered);
+
     setFilteredMangas(filtered);
-  }, [mangas, selectedGenres, selectedStatuses, searchQuery]);
+  }, [mangas, selectedGenres, selectedStatuses, searchQuery, ratingFilter, chapterFilter, sortBy]);
 
   const handleGenreChange = (genreId: string) => {
     setSelectedGenres(prev =>
@@ -247,6 +273,36 @@ const BrowsePage: React.FC = () => {
     setSelectedGenres([]);
     setSelectedStatuses([]);
     setSearchQuery('');
+    setRatingFilter(0);
+    setChapterFilter('all');
+    setSortBy('latest');
+  };
+
+  const handleImFeelingLucky = () => {
+    if (filteredMangas.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredMangas.length);
+      const randomManga = filteredMangas[randomIndex];
+      window.location.href = `/manga/${randomManga.id}`;
+    }
+  };
+
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+  };
+
+  const getSortedMangas = (mangas: Manga[]) => {
+    switch (sortBy) {
+      case 'title':
+        return [...mangas].sort((a, b) => a.title.localeCompare(b.title));
+      case 'rating':
+        return [...mangas].sort((a, b) => b.rating - a.rating);
+      case 'chapters':
+        return [...mangas].sort((a, b) => b.chapters - a.chapters);
+      case 'newest':
+        return [...mangas].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+      default: // latest
+        return [...mangas].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+    }
   };
 
   const handleSearch = (query: string) => {
@@ -272,56 +328,186 @@ const BrowsePage: React.FC = () => {
           </p>
         </div>
 
-        {/* Search and Filter Summary */}
-        {(selectedGenres.length > 0 || selectedStatuses.length > 0 || searchQuery) && (
-          <div className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Active filters:</span>
-              {searchQuery && (
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400 rounded-full">
-                  Search: "{searchQuery}"
-                </span>
-              )}
-              {selectedGenres.map(genreId => {
-                const genre = genres.find(g => g.id === genreId);
-                return (
-                  <span key={genreId} className="px-2 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full">
-                    {genre?.label}
-                  </span>
-                );
-              })}
-              {selectedStatuses.map(statusId => {
-                const status = statuses.find(s => s.id === statusId);
-                return (
-                  <span key={statusId} className="px-2 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-400 rounded-full">
-                    {status?.label}
-                  </span>
-                );
-              })}
-              <button
-                onClick={handleClearFilters}
-                className="px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400 rounded-full hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200"
-              >
-                Clear All
-              </button>
+        {/* Enhanced Search Section */}
+        <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          {/* Main Search Bar */}
+          <div className="mb-6">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search manga by title, author, or description..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-6 py-4 pl-12 text-lg border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              />
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg
+                  className="h-6 w-6 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
-        )}
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-          {/* Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
-            <Sidebar
-              genres={genres}
-              statuses={statuses}
-              selectedGenres={selectedGenres}
-              selectedStatuses={selectedStatuses}
-              onGenreChange={handleGenreChange}
-              onStatusChange={handleStatusChange}
-              onClearFilters={handleClearFilters}
-            />
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <button
+              onClick={handleImFeelingLucky}
+              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 flex items-center justify-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <span>I'm Feeling Lucky</span>
+            </button>
+            <button
+              onClick={handleClearFilters}
+              className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Reset Filters</span>
+            </button>
+            <button
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className="flex-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+              </svg>
+              <span>{showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters</span>
+            </button>
           </div>
 
+          {/* Advanced Filters */}
+          {showAdvancedFilters && (
+            <div className="space-y-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+              {/* Genre and Status Filters */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Genre Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    Genres
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                    {genres.map((genre) => (
+                      <label key={genre.id} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedGenres.includes(genre.id)}
+                          onChange={() => handleGenreChange(genre.id)}
+                          className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          {genre.label}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          ({genre.count})
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Status Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    Status
+                  </label>
+                  <div className="space-y-2">
+                    {statuses.map((status) => (
+                      <label key={status.id} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedStatuses.includes(status.id)}
+                          onChange={() => handleStatusChange(status.id)}
+                          className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          {status.label}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          ({status.count})
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating, Chapter, and Sort Filters */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Rating Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Minimum Rating
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      step="0.5"
+                      value={ratingFilter}
+                      onChange={(e) => setRatingFilter(parseFloat(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]">
+                      {ratingFilter}+
+                    </span>
+                  </div>
+                </div>
+
+                {/* Chapter Count Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Chapter Count
+                  </label>
+                  <select
+                    value={chapterFilter}
+                    onChange={(e) => setChapterFilter(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="all">All Lengths</option>
+                    <option value="short">Short (≤50 chapters)</option>
+                    <option value="medium">Medium (51-200 chapters)</option>
+                    <option value="long">Long (&gt;200 chapters)</option>
+                  </select>
+                </div>
+
+                {/* Sort Options */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Sort By
+                  </label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => handleSortChange(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="latest">Latest Updated</option>
+                    <option value="title">Title A-Z</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="chapters">Most Chapters</option>
+                    <option value="newest">Newest Added</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Main Content */}
           <div className="flex-1">
             {/* Results Header */}
@@ -335,18 +521,6 @@ const BrowsePage: React.FC = () => {
                     Showing results for your search and filters
                   </p>
                 )}
-              </div>
-              
-              {/* Sort Options */}
-              <div className="flex items-center space-x-2">
-                <label className="text-sm text-gray-600 dark:text-gray-400">Sort by:</label>
-                <select className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option value="latest">Latest Updated</option>
-                  <option value="title">Title A-Z</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="newest">Newest</option>
-                </select>
               </div>
             </div>
 
