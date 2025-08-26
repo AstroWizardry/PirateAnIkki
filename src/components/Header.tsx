@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useAuthActions} from '@convex-dev/auth/react';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import AuthButton from './AuthButton';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -7,6 +11,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const userProfile = useQuery(api.users.getCurrentUserProfile);
+  const isAdmin = useQuery(api.users.isAdmin);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,18 +53,30 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             >
               Browse
             </a>
-            <a
-              href="/library"
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Library
-            </a>
-            <a
-              href="/favorites"
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Favorites
-            </a>
+            {userProfile && (
+              <>
+                <a
+                  href="/library"
+                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Library
+                </a>
+                <a
+                  href="/favorites"
+                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Favorites
+                </a>
+              </>
+            )}
+            {isAdmin && (
+              <a
+                href="/admin"
+                className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Admin Panel
+              </a>
+            )}
           </nav>
 
           {/* Search and Mobile Menu */}
@@ -89,22 +107,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               </div>
             </form>
 
-            {/* User Icon */}
-            <button className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </button>
+            {/* Auth Button */}
+            <AuthButton />
 
             {/* Mobile Search Toggle */}
             <button
@@ -193,20 +197,33 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               >
                 Browse
               </a>
-              <a
-                href="/library"
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Library
-              </a>
-              <a
-                href="/favorites"
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Favorites
-              </a>
+              {userProfile && (
+                <>
+                  <a
+                    href="/library"
+                    className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Library
+                  </a>
+                  <a
+                    href="/favorites"
+                    className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Favorites
+                  </a>
+                </>
+              )}
+              {isAdmin && (
+                <a
+                  href="/admin"
+                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Admin Panel
+                </a>
+              )}
             </div>
           </div>
         )}
