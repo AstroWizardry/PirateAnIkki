@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { withConvexProvider } from '../lib/convex';
 
 const LibraryPage: React.FC = () => {
   const userProfile = useQuery(api.users.getCurrentUserProfile);
@@ -100,4 +101,4 @@ const LibraryPage: React.FC = () => {
   );
 };
 
-export default LibraryPage;
+export default withConvexProvider(LibraryPage);

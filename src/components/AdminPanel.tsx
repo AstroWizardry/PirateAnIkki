@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { withConvexProvider } from '../lib/convex';
 
 const AdminPanel: React.FC = () => {
   const userProfile = useQuery(api.users.getCurrentUserProfile);
@@ -177,4 +178,4 @@ const AdminPanel: React.FC = () => {
   );
 };
 
-export default AdminPanel;
+export default withConvexProvider(AdminPanel);

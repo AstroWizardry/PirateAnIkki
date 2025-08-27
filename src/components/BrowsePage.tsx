@@ -6,6 +6,7 @@ import MangaGridView from './MangaGridView';
 import MangaIconView from './MangaIconView';
 import ViewModeSelector from './ViewModeSelector';
 import type { ViewMode } from './ViewModeSelector';
+import { withConvexProvider } from '../lib/convex';
 
 interface Manga {
   id: string;
@@ -590,4 +591,4 @@ const BrowsePage: React.FC = () => {
   );
 };
 
-export default BrowsePage; 
+export default withConvexProvider(BrowsePage); 

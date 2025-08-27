@@ -2,6 +2,7 @@ import { CONVEX_URL } from "astro:env/client";
 import { ConvexReactClient } from "convex/react";
 import { type FunctionComponent, type JSX } from "react";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { ConvexProvider } from "convex/react";
 
 const convex = new ConvexReactClient(CONVEX_URL);
 
@@ -14,9 +15,11 @@ export function withConvexProvider<Props extends JSX.IntrinsicAttributes>(
 ) {
   return function WithConvexProvider(props: Props) {
     return (
+      <ConvexProvider client={convex}>
         <ConvexAuthProvider client={convex}>
           <Component {...props} />
         </ConvexAuthProvider>
+      </ConvexProvider>
     );
   };
 }

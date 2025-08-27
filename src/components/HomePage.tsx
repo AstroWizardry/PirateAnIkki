@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MangaGrid from './MangaGrid';
 import Header from './Header';
+import { withConvexProvider } from '../lib/convex';
 
 interface Manga {
   id: string;
@@ -383,4 +384,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage; 
+export default withConvexProvider(HomePage); 

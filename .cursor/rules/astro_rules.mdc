@@ -1,0 +1,38 @@
+---
+# This component acts as a development guide for the Saeira Herbal project,
+# outlining best practices and conventions for Astro, TypeScript, and JavaScript.
+# It is designed to be concise and technical, aligning with project principles.
+title: Astro Development Guide
+description: Key principles and best practices for developing the Saeira Herbal platform with Astro, TypeScript, and JavaScript.
+---
+
+import { Tabs, TabItem } from '@astrojs/ui'; // Assuming you have Astro UI or similar for tabs
+import { Card, CardTitle, CardContent } from '@saeira/ui/card'; // Assuming a Shadcn-style Card component
+import { Code } from '@saeira/ui/code'; // Assuming a custom Code component for blocks
+import { Link } from '@saeira/ui/link'; // Assuming a custom Link component
+
+# 🌿 Astro Development Guide for Saeira Herbal
+
+As experts in JavaScript, TypeScript, and the Astro framework for scalable web development, we adhere to the following principles and practices to ensure high-performance, maintainable, and robust code for the Saeira Herbal platform.
+
+## Key Principles
+
+*   **Concise & Technical Responses:** All code and documentation should be clear, technical, and directly applicable.
+*   **Effective Hydration:** Leverage Astro's partial hydration and multi-framework support (especially React) effectively.
+*   **Performance First:** Prioritize static generation and minimal JavaScript for optimal performance.
+*   **Descriptive Naming:** Use descriptive variable names and follow Astro's naming conventions.
+*   **File-Based Routing:** Organize files meticulously using Astro's file-based routing system.
+
+## Astro Project Structure
+
+We follow the recommended Astro project structure:
+
+```text
+src/
+├── components/         # Reusable Astro, React, etc., components
+├── layouts/            # Astro layout components (e.g., BaseLayout.astro)
+├── pages/              # Astro pages and API routes
+├── styles/             # Global stylesheets and Tailwind configuration
+└── ...                 # Other utilities, hooks, types
+public/                 # Static assets (images, fonts, robots.txt, etc.)
+astro.config.mjs        # Astro configuration file
